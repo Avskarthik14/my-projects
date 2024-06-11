@@ -1,0 +1,28 @@
+import random
+
+def fitness(individual):
+    return sum(individual)
+
+population = [[random.randint(0, 1) for _ in range(5)] for _ in range(10)]
+
+for _ in range(10):
+    # Evaluate fitness
+    fitness_values = [fitness(individual) for individual in population]
+    
+    # Selection
+    selected_parents = [random.choices(population, weights=fitness_values)[0] for _ in range(len(population))]
+    
+    # Crossover
+    offspring = [selected_parents[i][:2] + selected_parents[i+1][2:] for i in range(0, len(population), 2)]
+    
+    # Mutation
+    for individual in offspring:
+        if random.random() < 0.1:
+            index = random.randint(0, len(individual) - 1)
+            individual[index] = 1 - individual[index]
+    
+    population = offspring
+    best_individual = max(population, key=fitness)
+    best_fitness = fitness(best_individual)
+    print("Best solution found:", best_individual)
+    print("Fitness:", best_fitness)
